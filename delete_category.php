@@ -1,12 +1,4 @@
 <?php
-/*
-    Delete Category
-    ------------------
-    Deletes a category owned by the logged-in user.
-    Any tasks using this category are NOT deleted; their
-    category_id is simply set to NULL (see the database's
-    ON DELETE SET NULL rule) so no task data is lost.
-*/
 require_once "includes/auth_check.php";
 require_once "config/db.php";
 require_once "includes/flash.php";
