@@ -1,8 +1,4 @@
 <?php
-/*
-    Edit Category Page
-    ---------------------
-*/
 require_once "includes/auth_check.php";
 require_once "config/db.php";
 require_once "includes/flash.php";
@@ -18,7 +14,6 @@ if ($catId === '' || !is_numeric($catId)) {
 }
 $catId = (int) $catId;
 
-// Fetch category, making sure it belongs to this user
 $stmt = mysqli_prepare($conn, "SELECT * FROM categories WHERE id = ? AND user_id = ?");
 mysqli_stmt_bind_param($stmt, "ii", $catId, $userId);
 mysqli_stmt_execute($stmt);
@@ -41,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (strlen($name) > 50) {
         $errors[] = "Category name is too long (max 50 characters).";
     } else {
-        // Check for duplicate name (excluding this category itself)
         $check = mysqli_prepare($conn, "SELECT id FROM categories WHERE user_id = ? AND name = ? AND id != ?");
         mysqli_stmt_bind_param($check, "isi", $userId, $name, $catId);
         mysqli_stmt_execute($check);
