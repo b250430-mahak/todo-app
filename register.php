@@ -1,16 +1,9 @@
 <?php
-/*
-    User Registration Page
-    ------------------------
-    Shows a registration form and creates a new user account.
-    Also creates a few default categories for the new user so
-    the app is not empty on first login.
-*/
+
 require_once "includes/session_init.php";
 require_once "config/db.php";
 require_once "includes/flash.php";
 
-// If already logged in, no need to register again
 if (isset($_SESSION['user_id'])) {
     header("Location: dashboard.php");
     exit();
@@ -21,13 +14,11 @@ $name = $email = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Collect and trim form values
     $name     = trim($_POST['name'] ?? '');
     $email    = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirm  = $_POST['confirm_password'] ?? '';
 
-    // ---------- Server-side validation ----------
     if ($name === '') {
         $errors[] = "Name is required.";
     }
@@ -46,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Passwords do not match.";
     }
 
-    // Check if email is already registered (using a prepared statement)
     if (empty($errors)) {
         $stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ?");
         mysqli_stmt_bind_param($stmt, "s", $email);
@@ -59,9 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_close($stmt);
     }
 
-    // ---------- Insert new user ----------
     if (empty($errors)) {
-        // Hash the password before storing (never store plain text passwords)
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = mysqli_prepare($conn, "INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
@@ -71,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newUserId = mysqli_insert_id($conn);
             mysqli_stmt_close($stmt);
 
-            // Create a few default categories for this user
             $defaultCategories = ["Study", "Work", "Personal", "Shopping", "Health"];
             $catStmt = mysqli_prepare($conn, "INSERT INTO categories (user_id, name) VALUES (?, ?)");
             foreach ($defaultCategories as $catName) {
