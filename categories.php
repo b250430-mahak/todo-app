@@ -1,12 +1,4 @@
 <?php
-/*
-    Categories Page
-    ------------------
-    Lists all categories created by the user, shows how many
-    tasks are in each one, and provides a form to add a new
-    category. Editing and deleting are handled by separate
-    small pages (edit_category.php, delete_category.php).
-*/
 require_once "includes/auth_check.php";
 require_once "config/db.php";
 require_once "includes/flash.php";
@@ -15,7 +7,6 @@ $userId = $_SESSION['user_id'];
 $errors = [];
 $name = "";
 
-// ---------- Handle "Add Category" form ----------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
 
@@ -24,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (strlen($name) > 50) {
         $errors[] = "Category name is too long (max 50 characters).";
     } else {
-        // Check for duplicate category name for this user
         $check = mysqli_prepare($conn, "SELECT id FROM categories WHERE user_id = ? AND name = ?");
         mysqli_stmt_bind_param($check, "is", $userId, $name);
         mysqli_stmt_execute($check);
@@ -49,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ---------- Get all categories with a task count for each ----------
 $stmt = mysqli_prepare($conn, "SELECT c.id, c.name, COUNT(t.id) AS task_count
     FROM categories c
     LEFT JOIN tasks t ON t.category_id = c.id
