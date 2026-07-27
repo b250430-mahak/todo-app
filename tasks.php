@@ -1,23 +1,15 @@
 <?php
-/*
-    My Tasks Page
-    ---------------
-    Lists all tasks belonging to the logged-in user.
-    Supports: search by title, filter by category, filter by status.
-*/
+
 require_once "includes/auth_check.php";
 require_once "config/db.php";
 
 $userId = $_SESSION['user_id'];
 
-// ---------- Read filter values from the URL (GET request) ----------
 $search       = trim($_GET['search'] ?? '');
 $categoryId   = $_GET['category_id'] ?? '';
 $statusFilter = $_GET['status'] ?? '';
 
-// ---------- Build the SQL query dynamically but SAFELY ----------
-// We only ever add "?" placeholders to the query, never raw user input,
-// so this is protected against SQL injection.
+
 $sql = "SELECT t.id, t.title, t.description, t.priority, t.status, t.due_date, c.name AS category_name
         FROM tasks t
         LEFT JOIN categories c ON t.category_id = c.id
@@ -51,7 +43,6 @@ mysqli_stmt_bind_param($stmt, $types, ...$params);
 mysqli_stmt_execute($stmt);
 $tasks = mysqli_stmt_get_result($stmt);
 
-// ---------- Get categories for the filter dropdown ----------
 $catStmt = mysqli_prepare($conn, "SELECT id, name FROM categories WHERE user_id = ? ORDER BY name");
 mysqli_stmt_bind_param($catStmt, "i", $userId);
 mysqli_stmt_execute($catStmt);
@@ -61,7 +52,6 @@ $pageTitle = "My Tasks";
 require_once "includes/header.php";
 ?>
 
-<!-- Search & Filter Bar -->
 <div class="card filter-card">
     <form method="GET" action="tasks.php" class="filter-form">
         <input type="text" name="search" placeholder="Search tasks by title..." value="<?php echo htmlspecialchars($search); ?>" class="search-input">
@@ -89,7 +79,6 @@ require_once "includes/header.php";
     </form>
 </div>
 
-<!-- Task List -->
 <div class="card">
     <div class="card-header">
         <h3>All Tasks</h3>
