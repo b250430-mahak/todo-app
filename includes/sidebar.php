@@ -1,6 +1,5 @@
 <?php
-// Figure out which page is currently open so we can highlight
-// the matching sidebar link (simple active-state check).
+
 $current = basename($_SERVER['PHP_SELF']);
 ?>
 <div class="sidebar" id="sidebar">
