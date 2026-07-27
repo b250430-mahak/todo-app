@@ -10,7 +10,7 @@ require_once "includes/flash.php";
 $userId = $_SESSION['user_id'];
 $errors = [];
 
-// Values kept so the form can be re-filled if validation fails
+
 $title = $description = $priority = $due_date = "";
 $category_id = "";
 
@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // category_id is optional, but if given it must belong to this user
     $categoryIdToSave = null;
     if ($category_id !== '') {
         $checkCat = mysqli_prepare($conn, "SELECT id FROM categories WHERE id = ? AND user_id = ?");
@@ -73,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get categories for the dropdown
 $catStmt = mysqli_prepare($conn, "SELECT id, name FROM categories WHERE user_id = ? ORDER BY name");
 mysqli_stmt_bind_param($catStmt, "i", $userId);
 mysqli_stmt_execute($catStmt);
