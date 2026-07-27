@@ -1,11 +1,4 @@
 <?php
-/*
-    Delete Task
-    -------------
-    Deletes a task that belongs to the logged-in user.
-    Confirmation is handled on the client side (JS confirm dialog)
-    before this link is followed.
-*/
 require_once "includes/auth_check.php";
 require_once "config/db.php";
 require_once "includes/flash.php";
