@@ -1,10 +1,4 @@
 <?php
-/*
-    Edit Task Page
-    -----------------
-    Loads an existing task (only if it belongs to the logged-in
-    user) and lets the user update it.
-*/
 require_once "includes/auth_check.php";
 require_once "config/db.php";
 require_once "includes/flash.php";
@@ -12,7 +6,6 @@ require_once "includes/flash.php";
 $userId = $_SESSION['user_id'];
 $errors = [];
 
-// Task id must be given in the URL, e.g. edit_task.php?id=5
 $taskId = $_GET['id'] ?? $_POST['task_id'] ?? '';
 
 if ($taskId === '' || !is_numeric($taskId)) {
@@ -22,7 +15,6 @@ if ($taskId === '' || !is_numeric($taskId)) {
 }
 $taskId = (int) $taskId;
 
-// Fetch the task, making sure it belongs to this user
 $stmt = mysqli_prepare($conn, "SELECT * FROM tasks WHERE id = ? AND user_id = ?");
 mysqli_stmt_bind_param($stmt, "ii", $taskId, $userId);
 mysqli_stmt_execute($stmt);
@@ -35,7 +27,6 @@ if (!$task) {
     exit();
 }
 
-// Pre-fill values with the existing task (overwritten if form was submitted)
 $title       = $task['title'];
 $description = $task['description'] ?? '';
 $priority    = $task['priority'];
@@ -52,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category_id = $_POST['category_id'] ?? '';
     $status      = $_POST['status'] ?? 'Pending';
 
-    // ---------- Server-side validation ----------
     if ($title === '') {
         $errors[] = "Task title is required.";
     } elseif (strlen($title) > 150) {
@@ -108,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get categories for the dropdown
 $catStmt = mysqli_prepare($conn, "SELECT id, name FROM categories WHERE user_id = ? ORDER BY name");
 mysqli_stmt_bind_param($catStmt, "i", $userId);
 mysqli_stmt_execute($catStmt);
