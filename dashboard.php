@@ -1,16 +1,9 @@
 <?php
-/*
-    Dashboard Page
-    ----------------
-    Shows quick statistics (total / completed / pending tasks)
-    and a short list of the most recent tasks.
-*/
 require_once "includes/auth_check.php";
 require_once "config/db.php";
 
 $userId = $_SESSION['user_id'];
 
-// ---------- Get task counts ----------
 $stmt = mysqli_prepare($conn, "SELECT
         COUNT(*) AS total,
         SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) AS completed,
@@ -25,7 +18,6 @@ $totalTasks     = $counts['total'] ?? 0;
 $completedTasks = $counts['completed'] ?? 0;
 $pendingTasks   = $counts['pending'] ?? 0;
 
-// ---------- Get 5 most recent tasks ----------
 $stmt = mysqli_prepare($conn, "SELECT t.id, t.title, t.priority, t.status, t.due_date, c.name AS category_name
     FROM tasks t
     LEFT JOIN categories c ON t.category_id = c.id
@@ -40,7 +32,6 @@ $pageTitle = "Dashboard";
 require_once "includes/header.php";
 ?>
 
-<!-- Statistics Cards -->
 <div class="stats-grid">
     <div class="stat-card stat-total">
         <div class="stat-icon">&#128203;</div>
@@ -67,7 +58,6 @@ require_once "includes/header.php";
     </div>
 </div>
 
-<!-- Recent Tasks -->
 <div class="card">
     <div class="card-header">
         <h3>Recent Tasks</h3>
