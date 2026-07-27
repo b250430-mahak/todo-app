@@ -1,11 +1,5 @@
 <?php
-/*
-    Common Page Header
-    --------------------
-    Expects the variable $pageTitle to be set by the page
-    that includes this file. Also expects $conn (db) and the
-    user to already be logged in (auth_check.php already run).
-*/
+
 if (!isset($pageTitle)) {
     $pageTitle = "To-Do List";
 }
@@ -18,11 +12,7 @@ if (!isset($pageTitle)) {
     <title><?php echo htmlspecialchars($pageTitle); ?> | To-Do App</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<!--
-    The "theme-init" inline script runs before the page paints,
-    so dark mode is applied instantly without a flash of the
-    wrong theme. The saved choice is read from localStorage.
--->
+
 <body onload="applySavedTheme()">
 
 <div class="app-wrapper">
