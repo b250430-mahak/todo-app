@@ -1,10 +1,5 @@
 <?php
-/*
-    Toggle Task Status
-    ---------------------
-    Switches a task between "Pending" and "Completed" with a
-    single click, then returns the user to the page they came from.
-*/
+
 require_once "includes/auth_check.php";
 require_once "config/db.php";
 require_once "includes/flash.php";
@@ -13,7 +8,6 @@ $userId = $_SESSION['user_id'];
 $taskId = $_GET['id'] ?? '';
 
 if ($taskId !== '' && is_numeric($taskId)) {
-    // Get current status first
     $stmt = mysqli_prepare($conn, "SELECT status FROM tasks WHERE id = ? AND user_id = ?");
     mysqli_stmt_bind_param($stmt, "ii", $taskId, $userId);
     mysqli_stmt_execute($stmt);
@@ -36,7 +30,6 @@ if ($taskId !== '' && is_numeric($taskId)) {
     set_flash('error', "Invalid task.");
 }
 
-// Go back to whichever page the user clicked from (tasks list or dashboard)
 $redirectTo = $_SERVER['HTTP_REFERER'] ?? 'tasks.php';
 header("Location: $redirectTo");
 exit();
