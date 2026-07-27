@@ -1,12 +1,4 @@
-/* ============================================================
-   To-Do List App — Client-side JavaScript
-   Handles: dark/light theme toggle, mobile sidebar toggle,
-   simple form validation, and delete confirmation dialogs.
-   ============================================================ */
 
-/* ---------- Dark / Light theme ---------- */
-
-// Runs on every page load (called from <body onload="applySavedTheme()">)
 function applySavedTheme() {
     var savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
@@ -14,7 +6,6 @@ function applySavedTheme() {
     }
 }
 
-// Runs when the user clicks the theme toggle button
 function toggleTheme() {
     document.body.classList.toggle("dark-theme");
 
@@ -25,7 +16,6 @@ function toggleTheme() {
     }
 }
 
-/* ---------- Mobile sidebar toggle ---------- */
 function toggleSidebar() {
     var sidebar = document.getElementById("sidebar");
     if (sidebar) {
@@ -33,19 +23,11 @@ function toggleSidebar() {
     }
 }
 
-/* ---------- Delete confirmation ---------- */
 function confirmDelete(itemType) {
     return confirm("Are you sure you want to delete this " + itemType + "? This cannot be undone.");
 }
 
-/* ============================================================
-   Form Validation (client-side)
-   Note: The server (PHP) ALSO validates everything again.
-   Client-side validation is just for a faster, friendlier
-   experience — it is never trusted on its own.
-   ============================================================ */
 
-// ---------- Registration form ----------
 function validateRegisterForm() {
     var name = document.getElementById("name").value.trim();
     var email = document.getElementById("email").value.trim();
@@ -82,7 +64,6 @@ function validateRegisterForm() {
     return isValid;
 }
 
-// ---------- Login form ----------
 function validateLoginForm() {
     var email = document.getElementById("email").value.trim();
     var password = document.getElementById("password").value;
@@ -105,7 +86,6 @@ function validateLoginForm() {
     return isValid;
 }
 
-// ---------- Add / Edit task form ----------
 function validateTaskForm() {
     var title = document.getElementById("title").value.trim();
     var isValid = true;
@@ -123,7 +103,6 @@ function validateTaskForm() {
     return isValid;
 }
 
-// ---------- Add / Edit category form ----------
 function validateCategoryForm() {
     var nameField = document.querySelector('input[name="name"]');
     var name = nameField.value.trim();
@@ -142,7 +121,6 @@ function validateCategoryForm() {
     return isValid;
 }
 
-/* ---------- Small helper functions ---------- */
 function isValidEmail(email) {
     var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
